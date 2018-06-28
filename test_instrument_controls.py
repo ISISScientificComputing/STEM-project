@@ -1,5 +1,5 @@
 import unittest
-from instrumentclass import InstrumentControls
+from instrument_controls import InstrumentControls
 
 
 class TestInstrumentControls(unittest.TestCase):
