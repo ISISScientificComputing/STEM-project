@@ -1,12 +1,15 @@
 import time
+from validator.sample import Sample
 
 
 class Instrument(object):
+    new_sample = None
     x = 1
     y = 1
     z = 1
 
     def __init__(self, beam_x=1, beam_y=1, beam_z=1):
+        self.new_sample = Sample()
         self.x = beam_x
         self.y = beam_y
         self.z = beam_z

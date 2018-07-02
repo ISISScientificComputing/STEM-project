@@ -1,7 +1,12 @@
 import time
+from validator.instrument import Instrument
 
 
 class InstrumentControls(object):
+    new_instrument = None
+
+    def __init__(self):
+        self.new_instrument = Instrument()
 
     @staticmethod
     def print_value(value_to_print):
@@ -24,5 +29,3 @@ class InstrumentControls(object):
         except ValueError:
             raise ValueError("Not a number")
         time.sleep(sleep_timer)
-
-
