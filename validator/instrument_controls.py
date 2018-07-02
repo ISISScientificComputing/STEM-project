@@ -3,10 +3,12 @@ import time
 
 class InstrumentControls(object):
 
-    def print_value(self, value_to_print):
+    @staticmethod
+    def print_value(value_to_print):
         print(value_to_print)
 
-    def add(self, first, second):
+    @staticmethod
+    def add(first, second):
         try:
             int(first)
             int(second)
@@ -15,10 +17,12 @@ class InstrumentControls(object):
         ans = first + second
         return ans
 
-    def wait(self, sleeptimer):
+    @staticmethod
+    def wait(sleep_timer):
         try:
-            int(sleeptimer)
+            int(sleep_timer)
         except ValueError:
             raise ValueError("Not a number")
-        time.sleep(sleeptimer)
+        time.sleep(sleep_timer)
+
 
