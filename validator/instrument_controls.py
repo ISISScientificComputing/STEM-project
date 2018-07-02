@@ -14,7 +14,7 @@ class InstrumentControls(object):
             int(second)
         except ValueError:
             raise ValueError("Not a number")
-        ans = first + second
+        ans = first * second
         return ans
 
     @staticmethod
