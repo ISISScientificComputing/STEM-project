@@ -1,6 +1,6 @@
 import unittest
 from validator.instrument_controls import InstrumentControls
-from validator.main_instrument import MainInstrument
+from validator.instrument import Instrument
 from validator.sample import Sample
 
 
@@ -29,7 +29,7 @@ class TestInstrumentControls(unittest.TestCase):
         self.assertRaises(ValueError, instrument_controls.wait, "Letter")
 
 
-class TestMainInstrument(unittest.TestCase):
+class TestInstrument(unittest.TestCase):
 
     def test_value_is_same_as_input(self):
         main_instrument = MainInstrument()
