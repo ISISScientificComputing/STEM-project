@@ -1,7 +1,7 @@
 import time
 
 
-class MainInstrument(object):
+class Instrument(object):
     x = 1
     y = 1
     z = 1
