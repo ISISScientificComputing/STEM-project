@@ -32,26 +32,26 @@ class TestInstrumentControls(unittest.TestCase):
 class TestInstrument(unittest.TestCase):
 
     def test_value_is_same_as_input(self):
-        main_instrument = MainInstrument()
-        main_instrument.set_position(3, 4, -3)
-        self.assertEqual(main_instrument.x, 3)
-        self.assertEqual(main_instrument.y, 4)
-        self.assertEqual(main_instrument.z, -3)
+        instrument = Instrument()
+        instrument.set_position(3, 4, -3)
+        self.assertEqual(instrument.x, 3)
+        self.assertEqual(instrument.y, 4)
+        self.assertEqual(instrument.z, -3)
 
     def test_value_is_not_letter(self):
-        main_instrument = MainInstrument()
-        self.assertRaises(ValueError, main_instrument.set_position, "Letter", 4, 4)
+        instrument = Instrument()
+        self.assertRaises(ValueError, instrument.set_position, "Letter", 4, 4)
 
     def test_set_position_is_within_range(self):
-        main_instrument = MainInstrument()
-        main_instrument.set_position(5, 5, 5)
-        main_instrument.set_position(-5, -5, -5)
-        self.assertRaises(ValueError, main_instrument.set_position, -6, -6, -6)
-        self.assertRaises(ValueError, main_instrument.set_position, 6, 6, 6)
+        instrument = Instrument()
+        instrument.set_position(5, 5, 5)
+        instrument.set_position(-5, -5, -5)
+        self.assertRaises(ValueError, instrument.set_position, -6, -6, -6)
+        self.assertRaises(ValueError, instrument.set_position, 6, 6, 6)
 
     def test_wait_is_not_letter(self):
-        main_instrument = MainInstrument()
-        self.assertRaises(ValueError, main_instrument.set_position, "Letter", 2, 2)
+        instrument = Instrument()
+        self.assertRaises(ValueError, instrument.set_position, "Letter", 2, 2)
 
 
 class TestSample(unittest.TestCase):
