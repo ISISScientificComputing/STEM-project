@@ -12,7 +12,7 @@ class InstrumentControls(object):
 
     def print_value(self, value_to_print):
         print(value_to_print)
-        self.track_function.append("print_value")
+        self.track_function.append(("print_value", [value_to_print]))
 
     def add(self, first, second):
         try:
@@ -20,7 +20,7 @@ class InstrumentControls(object):
             int(second)
         except ValueError:
             raise ValueError("Not a number")
-        self.track_function.append("add")
+        self.track_function.append(("add", [first, second]))
         ans = first + second
         return ans
 
@@ -30,4 +30,4 @@ class InstrumentControls(object):
         except ValueError:
             raise ValueError("Not a number")
         time.sleep(sleep_timer)
-        self.track_function.append("wait")
+        self.track_function.append(("wait", [sleep_timer]))
