@@ -55,7 +55,7 @@ class TestInstanceCreated(unittest.TestCase):
         self.assertEqual(instrument_controls.new_instrument.new_sample.x, 1)
         self.assertEqual(instrument_controls.new_instrument.new_sample.y, 2)
         self.assertEqual(instrument_controls.new_instrument.new_sample.z, 3)
-        self.assertEqual(instrument_controls.get_sample_position(), (1, 1, 1))
+        self.assertEqual(instrument_controls.get_sample_position(), (1, 2, 3))
 
     def test_set_beam_position(self):
         instrument_controls = InstrumentControls()

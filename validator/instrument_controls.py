@@ -40,7 +40,7 @@ class InstrumentControls(object):
         self.new_instrument.new_sample.set_position(x, y, z)
 
     def get_sample_position(self):
-        return self.new_instrument.x, self.new_instrument.y, self.new_instrument.z
+        return self.new_instrument.new_sample.x, self.new_instrument.new_sample.y, self.new_instrument.new_sample.z
 
     def collect_data(self):
         self.new_instrument.collect(1)
