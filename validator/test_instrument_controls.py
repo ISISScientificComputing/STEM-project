@@ -24,10 +24,6 @@ class TestInstrumentControls(unittest.TestCase):
         instrument_controls = InstrumentControls()
         self.assertRaises(ValueError, instrument_controls.add, 'letter', 'letter')
 
-    def test_wait_with_letters(self):
-        instrument_controls = InstrumentControls()
-        self.assertRaises(ValueError, instrument_controls.wait, "Letter")
-
 
 class TestInstrument(unittest.TestCase):
 

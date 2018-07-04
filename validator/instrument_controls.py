@@ -24,10 +24,23 @@ class InstrumentControls(object):
         ans = first + second
         return ans
 
-    def wait(self, sleep_timer):
-        try:
-            int(sleep_timer)
-        except ValueError:
-            raise ValueError("Not a number")
-        time.sleep(sleep_timer)
-        self.track_function.append(("wait", [sleep_timer]))
+    def set_rotation(self, rotation):
+        self.new_instrument.new_sample.set_rotation(rotation)
+
+    def get_rotation(self):
+        return self.new_instrument.new_sample.rotation
+
+    def set_beam_position(self, x, y, z):
+        self.new_instrument.set_position(x, y, z)
+
+    def get_beam_position(self):
+        return self.new_instrument.x, self.new_instrument.y, self.new_instrument.z
+
+    def set_sample_position(self, x, y, z):
+        self.new_instrument.new_sample.set_position(x, y, z)
+
+    def get_sample_position(self):
+        return self.new_instrument.x, self.new_instrument.y, self.new_instrument.z
+
+    def collect_data(self):
+        self.new_instrument.collect(1)
