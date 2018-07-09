@@ -1,5 +1,6 @@
 import time
-from validator.sample import Sample
+
+from stem_project.instrument_controls.sample import Sample
 
 
 class Instrument(object):

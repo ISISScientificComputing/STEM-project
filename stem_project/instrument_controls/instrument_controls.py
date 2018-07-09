@@ -1,4 +1,4 @@
-from validator.instrument import Instrument
+from stem_project.instrument_controls.instrument import Instrument
 
 
 class InstrumentControls(object):
@@ -9,23 +9,9 @@ class InstrumentControls(object):
         self.new_instrument = Instrument()
         self.track_function = []
 
-    def print_value(self, value_to_print):
-        print(value_to_print)
-        self.track_function.append(("print_value", [value_to_print]))
-
-    def add(self, first, second):
-        try:
-            int(first)
-            int(second)
-        except ValueError:
-            raise ValueError("Not a number")
-        self.track_function.append(("add", [first, second]))
-        ans = first + second
-        return ans
-
-    def set_rotation(self, rotation):
+    def set_sample_rotation(self, rotation):
         self.new_instrument.new_sample.set_rotation(rotation)
-        self.track_function.append(("set_rotation", [rotation]))
+        self.track_function.append(("set_sample_rotation", [rotation]))
 
     def get_rotation(self):
         return self.new_instrument.new_sample.rotation

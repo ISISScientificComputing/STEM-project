@@ -15,7 +15,7 @@ class Validator(object):
         self.right_percentage = 0
 
     def execute_user_input(self):
-        from validator.user_script import IC
+        from stem_project.user_script.user_script import IC
         self.user_functions = IC.track_function
         if len(self.user_functions) == 0:
             raise IOError("No user functions found")
@@ -40,7 +40,7 @@ class Validator(object):
                         self.hints_functions.append("Your sample positions is not quite right")
                     elif "collect_data" == self.user_functions[index][0]:
                         self.hints_functions.append("Your wait time is not quite right")
-                    elif "set_rotation" == self.user_functions[index][0]:
+                    elif "set_sample_rotation" == self.user_functions[index][0]:
                         self.hints_functions.append("Your sample rotation is not quite right")
             else:
                 if max_iterations == len(self.expected_functions):
