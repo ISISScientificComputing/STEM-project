@@ -2,8 +2,6 @@ from stem_project.instrument_controls.instrument import Instrument
 
 
 class InstrumentControls(object):
-    new_instrument = None
-    track_function = []
 
     def __init__(self):
         self.new_instrument = Instrument()
