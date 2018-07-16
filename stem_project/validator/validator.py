@@ -31,13 +31,13 @@ class Validator(object):
         for index in range(max_iterations):
             # If both lists have an item at this index
             if index < min_iterations:
-                if self.expected_functions[index] == self.user_functions[index]:
+                if compare_function_wrappers(self.expected_functions[index], self.user_functions[index]):
                     # If the functions are the same
                     self.points = self.points + 10
                 else:
                     # If the functions are different
-                    self.incorrect_function(self.expected_functions[index][0],
-                                            self.user_functions[index][0])
+                    self.incorrect_function(self.expected_functions[index].name_of_function,
+                                            self.user_functions[index].name_of_function)
             else:
                 self.function_list_length_mismatch(index)
 
@@ -57,7 +57,12 @@ class Validator(object):
         """
         if len(self.expected_functions) > len(self.user_functions):
             self.hints_functions.append("You are missing this function: %s" %
-                                        self.expected_functions[current_index][0])
+                                        self.expected_functions[current_index].name_of_function)
         else:
             self.hints_functions.append("You have too many of this function: %s " %
-                                        self.user_functions[current_index][0])
+                                        self.user_functions[current_index].name_of_function)
+def compare_function_wrappers(function_wrapper_1, function_wrapper_2):
+    if function_wrapper_1.name_of_function == function_wrapper_2.name_of_function:
+        if function_wrapper_1.list_of_arguements == function_wrapper_2.list_of_arguements:
+            return True
+    return False
