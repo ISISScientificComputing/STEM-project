@@ -6,6 +6,12 @@ from stem_project.validator.function_wrapper import FunctionWrapper
 
 class TestValidator(unittest.TestCase):
 
+    def test_file_input(self):
+        validator = Validator(filepath=r"C:\Users\mantid\STEM-project\stem_project\test_data\expected_functions.txt")
+        validator.execute_user_input()
+        self.assertEqual(validator.right_percentage, 100)
+        self.assertEqual(len(validator.hints_functions), 0)
+
     def test_expected_equal_to_actual(self):
         set_sample_position_1_1_1 = FunctionWrapper("set_sample_position", [1, 1, 1])
         collect_data_0 = FunctionWrapper("collect_data", [0])

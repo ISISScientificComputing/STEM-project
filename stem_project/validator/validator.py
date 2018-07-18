@@ -1,12 +1,56 @@
+from stem_project.validator.function_wrapper import FunctionWrapper
+from os.path import isfile
+
+
 class Validator(object):
 
-    def __init__(self, input_list):
-        self.expected_functions = input_list
+    def __init__(self, input_list=None, filepath=None):
+        if input_list is None and filepath is None:
+            raise RuntimeError("Input is invalid")
+        if input_list is not None and filepath is not None:
+            raise RuntimeError("Input is invalid")
+        if input_list is not None and filepath is None:
+            self.expected_functions = input_list
+        if input_list is None and filepath is not None:
+            self.expected_functions = []
+            self.file_path = filepath
+            self.does_file_exist_in_dir()
+            self.read_expected_from_file()
+
         self.hints_functions = []
         self.user_functions = []
         self.points = 0
         self.total = 0
-        self.right_percentage = 0
+
+    def does_file_exist_in_dir(self):
+        return isfile(self.file_path)
+
+    def read_expected_from_file(self):
+        f = open(self.file_path, "r")
+        my_list = []
+        for line in f:
+            my_list.append(line)
+            words = line.split()
+            function_name = words[0]
+            # remove first item from words list
+            words.remove(words[0])
+            # Add line that splits up a string where there are commas
+            arguements = words[0].split(",")
+            # for each item in the list of arguments
+                # try to cast the argument to a str
+                # except a ValueErrot
+                # if we get a value error just leave the argument as it is
+                # if we can cast it to an integer make sure we update this in the list
+            try:
+                words = [int(i) for i in arguements]
+            except ValueError:
+                pass
+            self.expected_functions.append(FunctionWrapper(function_name, words))
+
+        f.close()
+
+
+
 
     def execute_user_input(self):
         from stem_project.user_script.user_script import IC
@@ -61,6 +105,8 @@ class Validator(object):
         else:
             self.hints_functions.append("You have too many of this function: %s " %
                                         self.user_functions[current_index].name_of_function)
+
+
 def compare_function_wrappers(function_wrapper_1, function_wrapper_2):
     if function_wrapper_1.name_of_function == function_wrapper_2.name_of_function:
         if function_wrapper_1.list_of_arguements == function_wrapper_2.list_of_arguements:
