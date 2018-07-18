@@ -35,22 +35,19 @@ class Validator(object):
             # remove first item from words list
             words.remove(words[0])
             # Add line that splits up a string where there are commas
-            arguements = words[0].split(",")
+            arguments = words[0].split(",")
             # for each item in the list of arguments
                 # try to cast the argument to a str
                 # except a ValueErrot
                 # if we get a value error just leave the argument as it is
                 # if we can cast it to an integer make sure we update this in the list
             try:
-                words = [int(i) for i in arguements]
+                words = [int(i) for i in arguments]
             except ValueError:
                 pass
             self.expected_functions.append(FunctionWrapper(function_name, words))
 
         f.close()
-
-
-
 
     def execute_user_input(self):
         from stem_project.user_script.user_script import IC
@@ -109,6 +106,23 @@ class Validator(object):
 
 def compare_function_wrappers(function_wrapper_1, function_wrapper_2):
     if function_wrapper_1.name_of_function == function_wrapper_2.name_of_function:
-        if function_wrapper_1.list_of_arguements == function_wrapper_2.list_of_arguements:
+        if function_wrapper_1.list_of_arguments == function_wrapper_2.list_of_arguments:
             return True
     return False
+
+
+def compare_function_blocks(expected_functions_block, user_functions_block):
+        expected_functions = expected_functions_block[0]
+        user_functions = user_functions_block[0]
+        expected_functions.sort()
+        user_functions.sort()
+        for index in range(len(expected_functions)):
+            if not compare_function_wrappers(expected_functions[index], user_functions[index]):
+                  return False
+        return True
+
+
+
+    # Take 2 function blocks as arguments
+    # sort each function block
+    # Use compa wrapper function for each functionwrapper in the blocks
