@@ -55,7 +55,7 @@ class Validator(object):
         self.validate_functions()
 
     def validate_functions(self):
-        self.user_functions = create_user_function_blocks(self.user_functions, self.expected_functions)
+        self.user_functions = self.format_user_functions()
 
         # Identify shortest list
         max_iterations = len(self.expected_functions)
@@ -110,14 +110,21 @@ class Validator(object):
             self.hints_functions.append(output_string %
                                         function_wrapper.name_of_function)
 
-
-
-
-def compare_function_wrappers(function_wrapper_1, function_wrapper_2):
-    if function_wrapper_1.name_of_function == function_wrapper_2.name_of_function:
-        if function_wrapper_1.list_of_arguments == function_wrapper_2.list_of_arguments:
-            return True
-    return False
+    def format_user_functions(self):
+        current_index = 0
+        formatted_user_functions = []
+        for block in self.expected_functions:
+            current_block_length = len(block)
+            user_functions_block = []
+            for _ in range(current_block_length):
+                if current_index >= len(self.user_functions):
+                    return formatted_user_functions
+                user_functions_block.append(self.user_functions[current_index])
+                current_index += 1
+            formatted_user_functions.append(user_functions_block)
+        for index in range(current_index, len(self.user_functions)):
+            formatted_user_functions.append([self.user_functions[index]])
+        return formatted_user_functions
 
 
 def compare_function_blocks(expected_functions_block, user_functions_block):
@@ -126,23 +133,8 @@ def compare_function_blocks(expected_functions_block, user_functions_block):
         expected_functions.sort()
         user_functions.sort()
         for index in range(len(expected_functions)):
-            if not compare_function_wrappers(expected_functions[index], user_functions[index]):
+            if not expected_functions[index] == user_functions[index]:
                 return False
         return True
 
 
-def create_user_function_blocks(all_user_functions, all_expected_functions):
-    current_index = 0
-    formatted_user_functions = []
-    for block in all_expected_functions:
-        current_block_length = len(block)
-        user_functions_block = []
-        for _ in range(current_block_length):
-            if current_index >= len(all_user_functions):
-                return formatted_user_functions
-            user_functions_block.append(all_user_functions[current_index])
-            current_index += 1
-        formatted_user_functions.append(user_functions_block)
-    for index in range(current_index, len(all_user_functions)):
-        formatted_user_functions.append([all_user_functions[index]])
-    return formatted_user_functions
