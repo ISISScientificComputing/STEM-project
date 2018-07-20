@@ -1,5 +1,6 @@
 from stem_project.validator.function_wrapper import FunctionWrapper
 from os.path import isfile
+from stem_project.validator.function_block import FunctionBlock
 
 
 class Validator(object):
@@ -43,7 +44,7 @@ class Validator(object):
                     pass
                 function_block.append(FunctionWrapper(function_name, arguments))
                 words.remove(words[0])
-            self.expected_functions.append(function_block)
+            self.expected_functions.append(FunctionBlock(function_block))
 
         f.close()
 
@@ -72,7 +73,7 @@ class Validator(object):
         for index in range(max_iterations):
             # If both lists have an item at this index
             if index < min_iterations:
-                if compare_function_blocks(self.expected_functions[index], self.user_functions[index]):
+                if self.expected_functions[index] == self.user_functions[index]:
                     # If the functions are the same
                     self.points = self.points + 10
                 else:
@@ -88,9 +89,9 @@ class Validator(object):
         self.right_percentage = (self.points/self.total)*100
 
     def incorrect_function(self, expected_function_block, actual_function_block):
-        for index in range(len(expected_function_block)):
-            expected_function_name = expected_function_block[index]
-            actual_function_name = actual_function_block[index]
+        for index in range(len(expected_function_block.function_wrappers)):
+            expected_function_name = expected_function_block.function_wrappers[index]
+            actual_function_name = actual_function_block.function_wrappers[index]
             if expected_function_name == actual_function_name:
                 self.hints_functions.append("%s is the correct function, "
                                             "but does not have the correct parameters." % actual_function_name)
@@ -106,7 +107,7 @@ class Validator(object):
             output_string = "You are missing this function %s"
         else:
             output_string = "You have too many of this function %s"
-        for function_wrapper in function_block:
+        for function_wrapper in function_block.function_wrappers:
             self.hints_functions.append(output_string %
                                         function_wrapper.name_of_function)
 
@@ -114,27 +115,15 @@ class Validator(object):
         current_index = 0
         formatted_user_functions = []
         for block in self.expected_functions:
-            current_block_length = len(block)
+            current_block_length = len(block.function_wrappers)
             user_functions_block = []
             for _ in range(current_block_length):
                 if current_index >= len(self.user_functions):
                     return formatted_user_functions
                 user_functions_block.append(self.user_functions[current_index])
                 current_index += 1
-            formatted_user_functions.append(user_functions_block)
+            formatted_user_functions.append(FunctionBlock(user_functions_block))
         for index in range(current_index, len(self.user_functions)):
-            formatted_user_functions.append([self.user_functions[index]])
+            formatted_user_functions.append(FunctionBlock([self.user_functions[index]]))
         return formatted_user_functions
-
-
-def compare_function_blocks(expected_functions_block, user_functions_block):
-        expected_functions = expected_functions_block
-        user_functions = user_functions_block
-        expected_functions.sort()
-        user_functions.sort()
-        for index in range(len(expected_functions)):
-            if not expected_functions[index] == user_functions[index]:
-                return False
-        return True
-
 
