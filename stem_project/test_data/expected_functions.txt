@@ -1,5 +1,4 @@
-set_sample_position 1,1,1
-set_sample_rotation 0
+set_sample_position 1,1,1 set_sample_rotation 0
 collect_data 0
 set_sample_rotation 120
 collect_data 0

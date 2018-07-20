@@ -27,30 +27,25 @@ class Validator(object):
 
     def read_expected_from_file(self):
         f = open(self.file_path, "r")
-        my_list = []
         for line in f:
-            my_list.append(line)
             words = line.split()
-            function_name = words[0]
-            # remove first item from words list
-            words.remove(words[0])
-            # Add line that splits up a string where there are commas
-            arguements = words[0].split(",")
-            # for each item in the list of arguments
-                # try to cast the argument to a str
-                # except a ValueErrot
-                # if we get a value error just leave the argument as it is
-                # if we can cast it to an integer make sure we update this in the list
-            try:
-                words = [int(i) for i in arguements]
-            except ValueError:
-                pass
-            self.expected_functions.append(FunctionWrapper(function_name, words))
+            function_block = []
+            while words:
+                function_name = words[0]
+                # remove first item from words list
+                words.remove(words[0])
+                # Add line that splits up a string where there are commas
+                arguments = words[0].split(",")
+
+                try:
+                    arguments = [int(i) for i in arguments]
+                except ValueError:
+                    pass
+                function_block.append(FunctionWrapper(function_name, arguments))
+                words.remove(words[0])
+            self.expected_functions.append(function_block)
 
         f.close()
-
-
-
 
     def execute_user_input(self):
         from stem_project.user_script.user_script import IC
@@ -60,6 +55,8 @@ class Validator(object):
         self.validate_functions()
 
     def validate_functions(self):
+        self.user_functions = create_user_function_blocks(self.user_functions, self.expected_functions)
+
         # Identify shortest list
         max_iterations = len(self.expected_functions)
         min_iterations = len(self.user_functions)
@@ -75,40 +72,77 @@ class Validator(object):
         for index in range(max_iterations):
             # If both lists have an item at this index
             if index < min_iterations:
-                if compare_function_wrappers(self.expected_functions[index], self.user_functions[index]):
+                if compare_function_blocks(self.expected_functions[index], self.user_functions[index]):
                     # If the functions are the same
                     self.points = self.points + 10
                 else:
                     # If the functions are different
-                    self.incorrect_function(self.expected_functions[index].name_of_function,
-                                            self.user_functions[index].name_of_function)
+                    self.incorrect_function(self.expected_functions[index],
+                                            self.user_functions[index])
             else:
-                self.function_list_length_mismatch(index)
+                if max_iterations == len(self.expected_functions):
+                    self.function_list_length_mismatch(self.expected_functions[index])
+                else:
+                    self.function_list_length_mismatch(self.user_functions[index])
 
         self.right_percentage = (self.points/self.total)*100
 
-    def incorrect_function(self, expected_function_name, actual_function_name):
-        if expected_function_name == actual_function_name:
-            self.hints_functions.append("%s is the correct function, "
-                                        "but does not have the correct parameters." % actual_function_name)
-        else:
-            self.hints_functions.append("%s is not the correct function." % actual_function_name)
+    def incorrect_function(self, expected_function_block, actual_function_block):
+        for index in range(len(expected_function_block)):
+            expected_function_name = expected_function_block[index]
+            actual_function_name = actual_function_block[index]
+            if expected_function_name == actual_function_name:
+                self.hints_functions.append("%s is the correct function, "
+                                            "but does not have the correct parameters." % actual_function_name)
+            else:
+                self.hints_functions.append("%s is not the correct function." % actual_function_name)
 
-    def function_list_length_mismatch(self, current_index):
+    def function_list_length_mismatch(self, function_block):
         """
         If the expected_function list and the user_functions list are not of equal length
         :param current_index: The current index in the list to check
         """
         if len(self.expected_functions) > len(self.user_functions):
-            self.hints_functions.append("You are missing this function: %s" %
-                                        self.expected_functions[current_index].name_of_function)
+            output_string = "You are missing this function %s"
         else:
-            self.hints_functions.append("You have too many of this function: %s " %
-                                        self.user_functions[current_index].name_of_function)
+            output_string = "You have too many of this function %s"
+        for function_wrapper in function_block:
+            self.hints_functions.append(output_string %
+                                        function_wrapper.name_of_function)
+
+
 
 
 def compare_function_wrappers(function_wrapper_1, function_wrapper_2):
     if function_wrapper_1.name_of_function == function_wrapper_2.name_of_function:
-        if function_wrapper_1.list_of_arguements == function_wrapper_2.list_of_arguements:
+        if function_wrapper_1.list_of_arguments == function_wrapper_2.list_of_arguments:
             return True
     return False
+
+
+def compare_function_blocks(expected_functions_block, user_functions_block):
+        expected_functions = expected_functions_block
+        user_functions = user_functions_block
+        expected_functions.sort()
+        user_functions.sort()
+        for index in range(len(expected_functions)):
+            if not compare_function_wrappers(expected_functions[index], user_functions[index]):
+                return False
+        return True
+
+
+def create_user_function_blocks(all_user_functions, all_expected_functions):
+    current_index = 0
+    formatted_user_functions = []
+    for block in all_expected_functions:
+        current_block_length = len(block)
+        user_functions_block = []
+        for _ in range(current_block_length):
+            if current_index >= len(all_user_functions):
+                return formatted_user_functions
+            user_functions_block.append(all_user_functions[current_index])
+            current_index += 1
+        formatted_user_functions.append(user_functions_block)
+    for index in range(current_index, len(all_user_functions)):
+        formatted_user_functions.append([all_user_functions[index]])
+    return formatted_user_functions
