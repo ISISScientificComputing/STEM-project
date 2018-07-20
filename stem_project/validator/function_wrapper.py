@@ -19,3 +19,10 @@ class FunctionWrapper (object):
             if len(self.list_of_arguments) == len(other.list_of_arguments):
                 if self.list_of_arguments > other.list_of_arguments:
                     return self
+
+    def __eq__(self, other):
+        if isinstance(other, FunctionWrapper):
+            if self.name_of_function == other.name_of_function:
+                if self.list_of_arguments == other.list_of_arguments:
+                    return True
+        return False
