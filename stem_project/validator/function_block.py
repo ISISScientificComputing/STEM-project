@@ -6,9 +6,9 @@ class FunctionBlock(object):
     function_wrappers = None
 
     def __init__(self, list_of_function_wrappers):
-        for functionwrapper in list_of_function_wrappers:
+        for function_wrapper in list_of_function_wrappers:
             try:
-                isinstance(functionwrapper, FunctionWrapper)
+                isinstance(function_wrapper, FunctionWrapper)
             except Exception:
                 raise Exception("This is not a function wrapper")
             self.function_wrappers = list_of_function_wrappers

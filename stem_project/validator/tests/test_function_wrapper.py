@@ -35,13 +35,13 @@ class TestFunctionWrapper(unittest.TestCase):
         self.assertNotEqual(my_function_wrapper_1, my_function_wrapper_2)
 
     def test_greater_than_name_alphabetically_higher(self):
-        my_function_wrapper_name_1 = FunctionWrapper("zname", [1])
+        my_function_wrapper_name_1 = FunctionWrapper("z_name", [1])
         my_function_wrapper_name_2 = FunctionWrapper("name", [1])
         self.assertGreater(my_function_wrapper_name_1, my_function_wrapper_name_2)
 
     def test_greater_than_name_alphabetically_lower(self):
         my_function_wrapper_name_1 = FunctionWrapper("name", [1])
-        my_function_wrapper_name_2 = FunctionWrapper("zname", [1])
+        my_function_wrapper_name_2 = FunctionWrapper("z_name", [1])
         self.assertGreater(my_function_wrapper_name_2, my_function_wrapper_name_1)
 
     def test_greater_than_name_equal_args_more(self):

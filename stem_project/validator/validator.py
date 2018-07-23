@@ -18,10 +18,9 @@ class Validator(object):
             self.does_file_exist_in_dir()
             self.read_expected_from_file()
 
-        self.hints_functions = []
+        self.execution_output_message = []
         self.user_functions = []
-        self.points = 0
-        self.total = 0
+        self.percentage_correct = 0
 
     def does_file_exist_in_dir(self):
         return isfile(self.file_path)
@@ -53,7 +52,7 @@ class Validator(object):
         self.user_functions = IC.track_function
         if len(self.user_functions) == 0:
             raise IOError("No user functions found")
-        self.validate_functions()
+        return self.validate_functions()
 
     def validate_functions(self):
         self.user_functions = self.format_user_functions()
@@ -67,38 +66,48 @@ class Validator(object):
             min_iterations = len(self.expected_functions)
 
         # Calculate percentage total
-        self.total = max_iterations*10
+        total = max_iterations * 10
 
         # Iterate over the longest list
+        points = 0
         for index in range(max_iterations):
             # If both lists have an item at this index
             if index < min_iterations:
                 if self.expected_functions[index] == self.user_functions[index]:
                     # If the functions are the same
-                    self.points = self.points + 10
+                    points = points + 10
+                    self.percentage_correct = (points / total) * 100
                 else:
                     # If the functions are different
-                    self.incorrect_function(self.expected_functions[index],
-                                            self.user_functions[index])
+                    self.percentage_correct = (points / total) * 100
+                    return self.incorrect_function(self.expected_functions[index],
+                                                   self.user_functions[index])
             else:
+                self.percentage_correct = (points / total) * 100
                 if max_iterations == len(self.expected_functions):
-                    self.function_list_length_mismatch(self.expected_functions[index])
+                    return self.function_list_length_mismatch(self.expected_functions[index])
                 else:
-                    self.function_list_length_mismatch(self.user_functions[index])
+                    return self.function_list_length_mismatch(self.user_functions[index])
 
-        self.right_percentage = (self.points/self.total)*100
+        self.percentage_correct = (points / total) * 100
+
+        if self.percentage_correct == 100:
+            return "Well done all functions were called correctly!"
 
     def incorrect_function(self, expected_function_block, actual_function_block):
         for index in range(len(expected_function_block.function_wrappers)):
             expected_function_name = expected_function_block.function_wrappers[index]
             actual_function_name = actual_function_block.function_wrappers[index]
             if expected_function_name == actual_function_name:
-                self.hints_functions.append("%s is the correct function, "
-                                            "but does not have the correct parameters." % actual_function_name)
+                return "%s is the correct function, but does not have the correct parameters." % actual_function_name.name_of_function
             else:
-                self.hints_functions.append("%s is not the correct function." % actual_function_name)
+                return "%s is not the correct function." % actual_function_name.name_of_function
 
     def function_list_length_mismatch(self, function_block):
+        """
+        If the expected_function list and the user_functions list are not of equal length
+        :param current_index: The current index in the list to check
+        """
         """
         If the expected_function list and the user_functions list are not of equal length
         :param current_index: The current index in the list to check
@@ -108,8 +117,7 @@ class Validator(object):
         else:
             output_string = "You have too many of this function %s"
         for function_wrapper in function_block.function_wrappers:
-            self.hints_functions.append(output_string %
-                                        function_wrapper.name_of_function)
+            return output_string % function_wrapper.name_of_function
 
     def format_user_functions(self):
         current_index = 0
@@ -126,4 +134,3 @@ class Validator(object):
         for index in range(current_index, len(self.user_functions)):
             formatted_user_functions.append(FunctionBlock([self.user_functions[index]]))
         return formatted_user_functions
-
