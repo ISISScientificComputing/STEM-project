@@ -24,7 +24,7 @@ class FunctionBlock(object):
 
     def split_block_into_sublists(self):
         self.function_wrappers.sort()
-        functions_dictionary = {self.function_wrappers[0].name_of_function:[self.function_wrappers[0]]}
+        functions_dictionary = {self.function_wrappers[0].name_of_function: [self.function_wrappers[0]]}
         for current in self.function_wrappers[1:]:
             if current.name_of_function in functions_dictionary.keys():
                 functions_dictionary[current.name_of_function].append(current)
