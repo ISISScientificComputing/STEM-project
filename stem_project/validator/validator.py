@@ -99,7 +99,8 @@ class Validator(object):
             expected_function_name = expected_function_block.function_wrappers[index]
             actual_function_name = actual_function_block.function_wrappers[index]
             if expected_function_name == actual_function_name:
-                return "%s is the correct function, but does not have the correct parameters." % actual_function_name.name_of_function
+                return "%s is the correct function, but does not have the correct parameters." % actual_function_name.\
+                    name_of_function
             else:
                 return "%s is not the correct function." % actual_function_name.name_of_function
 
