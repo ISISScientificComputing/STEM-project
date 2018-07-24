@@ -38,8 +38,8 @@ class TestFunctionBlock(unittest.TestCase):
         self.assertEqual(type(my_function_wrapper_1), FunctionWrapper)
 
     def test_init_invalid_input(self):
-        not_function_wrapper = ("set_sample_rotation", [10])
-        self.assertNotEqual(type(not_function_wrapper), FunctionWrapper)
+        not_function_wrapper = [("set_sample_rotation", [10])]
+        self.failUnlessRaises(RuntimeError, FunctionBlock, not_function_wrapper)
 
     def test_valid_equality(self):
         my_function_wrapper_1 = FunctionWrapper("set_sample_rotation", [10])
