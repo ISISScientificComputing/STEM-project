@@ -1,6 +1,6 @@
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-from stem_project.interface.test_ui import Ui_MainWindow
+from stem_project.interface.interface import Ui_MainWindow
 
 
 class MainApp(QtWidgets.QMainWindow, Ui_MainWindow):
