@@ -1,14 +1,16 @@
 import unittest
-from stem_project.validator.function_block import FunctionBlock
+import os
+
+from stem_project.function_models.function_block import FunctionBlock
 from stem_project.validator.validator import Validator
-from stem_project.validator.function_wrapper import FunctionWrapper
+from stem_project.function_models.function_wrapper import FunctionWrapper
+from stem_project.project import ROOT_DIR
 
 
 class TestValidator(unittest.TestCase):
 
     def test_file_input(self):
-        validator = Validator(filepath=r'C:\\Users\\mantid\\STEM-project\\'
-                                       r'stem_project\\test_data\\expected_functions.txt')
+        validator = Validator(file_path=os.path.join(ROOT_DIR, 'test_data', 'expected_functions.txt'))
         validator.execute_user_input()
         self.assertEqual(validator.percentage_correct, 100)
 

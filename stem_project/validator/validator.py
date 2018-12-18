@@ -1,51 +1,34 @@
-from stem_project.validator.function_wrapper import FunctionWrapper
-from os.path import isfile
-from stem_project.validator.function_block import FunctionBlock
+"""
+Takes either a list of expected functions, or a file path to a .txt file
+containing the expected functions
+
+1 : Parse the expected functions
+2 : Execute the users code
+3 : Compare the users code and the expected and return improvements / score
+
+"""
+
+from stem_project.validator.parse_expected_func_file import read_expected_from_file
+from stem_project.function_models import FunctionBlock
 
 
 class Validator(object):
 
-    def __init__(self, input_list=None, filepath=None):
-        if input_list is None and filepath is None:
+    def __init__(self, input_list=None, file_path=None):
+        if input_list is None and file_path is None:
             raise RuntimeError("Input is invalid")
-        if input_list is not None and filepath is not None:
+        if input_list and file_path:
             raise RuntimeError("Input is invalid")
-        if input_list is not None and filepath is None:
+        if input_list and file_path is None:
             self.expected_functions = input_list
-        if input_list is None and filepath is not None:
+        else:
             self.expected_functions = []
-            self.file_path = filepath
-            self.does_file_exist_in_dir()
-            self.read_expected_from_file()
+            self.file_path = file_path
+            self.expected_functions = read_expected_from_file(self.file_path)
 
         self.execution_output_message = []
         self.user_functions = []
         self.percentage_correct = 0
-
-    def does_file_exist_in_dir(self):
-        return isfile(self.file_path)
-
-    def read_expected_from_file(self):
-        f = open(self.file_path, "r")
-        for line in f:
-            words = line.split()
-            function_block = []
-            while words:
-                function_name = words[0]
-                # remove first item from words list
-                words.remove(words[0])
-                # Add line that splits up a string where there are commas
-                arguments = words[0].split(",")
-
-                try:
-                    arguments = [int(i) for i in arguments]
-                except ValueError:
-                    pass
-                function_block.append(FunctionWrapper(function_name, arguments))
-                words.remove(words[0])
-            self.expected_functions.append(FunctionBlock(function_block))
-
-        f.close()
 
     def execute_user_input(self):
         from stem_project.user_script.user_script import IC
@@ -107,11 +90,6 @@ class Validator(object):
     def function_list_length_mismatch(self, function_block):
         """
         If the expected_function list and the user_functions list are not of equal length
-        :param current_index: The current index in the list to check
-        """
-        """
-        If the expected_function list and the user_functions list are not of equal length
-        :param current_index: The current index in the list to check
         """
         if len(self.expected_functions) > len(self.user_functions):
             output_string = "You are missing this function %s"

@@ -1,5 +1,5 @@
 from stem_project.instrument_controls.instrument import Instrument
-from stem_project.validator.function_wrapper import FunctionWrapper
+from stem_project.function_models.function_wrapper import FunctionWrapper
 
 
 class InstrumentControls(object):

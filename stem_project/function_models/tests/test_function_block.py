@@ -1,6 +1,6 @@
 import unittest
-from stem_project.validator.function_block import FunctionBlock
-from stem_project.validator.function_wrapper import FunctionWrapper
+from stem_project.function_models.function_block import FunctionBlock
+from stem_project.function_models.function_wrapper import FunctionWrapper
 
 
 class TestFunctionBlock(unittest.TestCase):

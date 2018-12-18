@@ -1,7 +1,6 @@
 import unittest
 from stem_project.instrument_controls.instrument_controls import InstrumentControls
-from stem_project.validator.function_wrapper import FunctionWrapper
-from stem_project.validator.validator import compare_function_wrappers
+from stem_project.function_models.function_wrapper import FunctionWrapper
 
 class TestInstrumentControls(unittest.TestCase):
 
@@ -37,8 +36,8 @@ class TestInstrumentControls(unittest.TestCase):
         expected_result = [set_sample_rotation_1, set_sample_position_1_1_1]
         instrument_controls.set_sample_rotation(1)
         instrument_controls.set_sample_position(1, 1, 1)
-        self.assertTrue(compare_function_wrappers(instrument_controls.track_function[0], expected_result[0]))
-        self.assertTrue(compare_function_wrappers(instrument_controls.track_function[1], expected_result[1]))
+        self.assertEqual(instrument_controls.track_function[0], expected_result[0])
+        self.assertEqual(instrument_controls.track_function[1], expected_result[1])
 
     def test_track_function_list_with_multiple_calls(self):
         instrument_controls = InstrumentControls()
